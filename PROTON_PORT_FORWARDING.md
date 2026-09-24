@@ -12,11 +12,11 @@ Use a machine with the Android SDK and Java/Gradle prerequisites specified by th
 ./gradlew :app:assembleBaseDebug
 ```
 
-The APK is under `app/build/outputs/apk/base/debug/`. It is signed with a development key and cannot normally be installed as an update over the official app. Back up app data before replacing an existing installation. A release build needs your own signing key.
+The APK is under `app/build/outputs/apk/base/debug/`. It is signed with a development key and uses the separate package name `org.proninyaroslav.libretorrent.debug`, so it can be installed alongside the official app. It has separate app data. A release build needs your own signing key.
 
 ## Cloud build from a phone
 
-The patch includes `.github/workflows/build-proton-apk.yml`. On a GitHub repository containing the patched sources, a push to the default branch starts a GitHub Actions build and uploads `LibreTorrent-Proton-debug` as an artifact. In the repository on a phone browser, open **Actions → Build Proton test APK → latest run → Artifacts**, download the ZIP, extract the APK, and install it. A fork alone does not contain this patch; the changes still need to be pushed to that fork.
+The patch includes `.github/workflows/build-proton-apk.yml`. On a GitHub repository containing the patched sources, a push to the default branch starts a GitHub Actions build and uploads `LibreTorrent-Proton-debug` as an artifact. In the repository on a phone browser, open **Actions → Build Proton test APK → latest run → Artifacts**, download the ZIP, extract the APK, and install it. The patched fork at https://github.com/coolplayerivan/libretorrent contains the source and build workflow.
 
 ## Device check
 
@@ -25,4 +25,4 @@ The patch includes `.github/workflows/build-proton-apk.yml`. On a GitHub reposit
 3. Start WireGuard, then enable **Network → Proton VPN port forwarding** in LibreTorrent. Check that the status shows a TCP/UDP port. Ordinary NAT-PMP and UPnP need no manual change; the new mode overrides them while enabled.
 4. Reconnect WireGuard and check whether the status and LibreTorrent's listening port update. Confirm incoming reachability from another network. A successful NAT-PMP response alone cannot prove incoming connectivity.
 
-This implementation has not yet been built with the Android SDK or exercised against an actual Proton tunnel in the current environment. Proton's documented manual flow is at https://protonvpn.com/support/port-forwarding-manual-setup .
+GitHub Actions build 36062082176 completed successfully on 2026-09-24. The APK has not yet been exercised against an actual Proton tunnel on a phone. Proton's documented manual flow is at https://protonvpn.com/support/port-forwarding-manual-setup .

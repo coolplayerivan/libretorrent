@@ -2,7 +2,7 @@
 
 Based on LibreTorrent 4.1.1 (`ae96f20`). This patch adds **Network → Proton VPN port forwarding** and a live mapping status. It keeps libtorrent4j 2.1.0-38 so the project's Android compatibility is unchanged.
 
-When enabled, LibreTorrent sends NAT-PMP mapping requests to `10.2.0.1:5351` over Android's active VPN network, requires the same external TCP and UDP port, renews the 60-second lease every 45 seconds, and updates the session's listening port when Proton returns a new one. Its ordinary UPnP and NAT-PMP mappers are disabled in this mode. On errors it retries every five seconds and reports the error under the setting. The status reports the NAT-PMP allocation and requested listening port; it does not prove that a remote peer can reach the device.
+When enabled, LibreTorrent sends NAT-PMP mapping requests to `10.2.0.1:5351` over Android's active VPN network, requires the same external TCP and UDP port, renews the 60-second lease every 45 seconds, and updates the session's listening port when Proton returns a new one. Its ordinary UPnP and NAT-PMP mappers are disabled in this mode. On errors it retries every five seconds and reports the error under the setting. The status reports the NAT-PMP allocation, the gateway-reported public IPv4 address, the VPN interface IPv4 address, and libtorrent's listening port. The listener binds to the VPN IPv4 address. The status does not prove that a remote peer can reach the device.
 
 ## Build
 
@@ -12,7 +12,7 @@ Use a machine with the Android SDK and Java/Gradle prerequisites specified by th
 ./gradlew :app:assembleBaseDebug
 ```
 
-The APK is under `app/build/outputs/apk/base/debug/`. It is signed with a development key and uses the separate package name `org.proninyaroslav.libretorrent.debug`, so it can be installed alongside the official app. It has separate app data. A release build needs your own signing key.
+The APK is under `app/build/outputs/apk/base/debug/`. It is signed with a development key and uses the separate package name `org.proninyaroslav.libretorrent.debug`, so it can be installed alongside the official app. It has separate app data. Each GitHub Actions runner creates a different debug signing key: uninstall any earlier test APK before installing another build. A release build needs your own signing key.
 
 ## Cloud build from a phone
 

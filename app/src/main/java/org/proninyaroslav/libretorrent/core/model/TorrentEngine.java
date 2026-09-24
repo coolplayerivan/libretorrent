@@ -1255,7 +1255,11 @@ public class TorrentEngine {
     }
 
     public synchronized String protonPortForwardingStatus() {
-        return protonForwarder == null ? "Stopped" : protonForwarder.status();
+        if (protonForwarder == null) return "Stopped";
+        String status = protonForwarder.status();
+        if (status.startsWith("Mapped:"))
+            status += "; listening: " + session.getListenPort();
+        return status;
     }
 
     private synchronized void updateProtonForwarding() {
@@ -1275,16 +1279,22 @@ public class TorrentEngine {
         if (protonForwarder != null) {
             protonForwarder.stop();
             protonForwarder = null;
+            if (isRunning()) {
+                SessionSettings settings = session.getSettings();
+                settings.inetAddress = SessionSettings.DEFAULT_INETADDRESS;
+                session.setSettings(settings, true);
+            }
         }
     }
 
-    private synchronized void onProtonPortChanged(int port) {
+    private synchronized void onProtonPortChanged(int port, String vpnAddress) {
         if (protonForwarder == null || !pref.protonPortForwarding() || !isRunning()) return;
         SessionSettings settings = session.getSettings();
+        settings.inetAddress = vpnAddress;
         settings.portRangeFirst = port;
         settings.portRangeSecond = port;
         session.setSettings(settings, true);
-        Log.i(TAG, "Proton port forwarding: listening on " + port);
+        Log.i(TAG, "Proton port forwarding: listening on " + vpnAddress + ":" + port);
     }
 
     private final TorrentEngineListener engineListener = new TorrentEngineListener() {

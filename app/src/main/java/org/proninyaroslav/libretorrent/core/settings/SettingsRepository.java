@@ -167,6 +167,10 @@ public interface SettingsRepository
 
     void enableNatPmp(boolean val);
 
+    boolean protonPortForwarding();
+
+    void protonPortForwarding(boolean val);
+
     boolean useRandomPort();
 
     void useRandomPort(boolean val);

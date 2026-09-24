@@ -45,6 +45,7 @@ public class SessionSettings
     public static final boolean DEFAULT_UTP_ENABLED = true;
     public static final boolean DEFAULT_UPNP_ENABLED = true;
     public static final boolean DEFAULT_NATPMP_ENABLED = true;
+    public static final boolean DEFAULT_PROTON_PORT_FORWARDING = false;
     public static final EncryptMode DEFAULT_ENCRYPT_MODE = EncryptMode.ENABLED;
     public static final boolean DEFAULT_AUTO_MANAGED = false;
     public static final String DEFAULT_INETADDRESS = "0.0.0.0";
@@ -89,6 +90,7 @@ public class SessionSettings
     public boolean utpEnabled = DEFAULT_UTP_ENABLED;
     public boolean upnpEnabled = DEFAULT_UPNP_ENABLED;
     public boolean natPmpEnabled = DEFAULT_NATPMP_ENABLED;
+    public boolean protonPortForwarding = DEFAULT_PROTON_PORT_FORWARDING;
     public EncryptMode encryptModeOutcoming = DEFAULT_ENCRYPT_MODE;
     public EncryptMode encryptModeIncoming = DEFAULT_ENCRYPT_MODE;
     public boolean autoManaged = DEFAULT_AUTO_MANAGED;
@@ -137,6 +139,7 @@ public class SessionSettings
         this.utpEnabled = other.utpEnabled;
         this.upnpEnabled = other.upnpEnabled;
         this.natPmpEnabled = other.natPmpEnabled;
+        this.protonPortForwarding = other.protonPortForwarding;
         this.encryptModeIncoming = other.encryptModeIncoming;
         this.encryptModeOutcoming = other.encryptModeOutcoming;
         this.autoManaged = other.autoManaged;

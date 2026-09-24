@@ -47,6 +47,18 @@
         app:singleLineTitle="false" />
 
     <SwitchPreferenceCompat
+        android:key="@string/pref_key_proton_port_forwarding"
+        android:persistent="false"
+        android:title="@string/pref_proton_port_forwarding_title"
+        android:summary="@string/pref_proton_port_forwarding_summary"
+        app:singleLineTitle="false" />
+
+    <Preference
+        android:key="pref_key_proton_port_forwarding_status"
+        android:persistent="false"
+        android:title="@string/pref_proton_port_forwarding_status" />
+
+    <SwitchPreferenceCompat
         android:key="@string/pref_key_show_nat_errors"
         android:persistent="false"
         android:title="@string/pref_show_nat_errors"

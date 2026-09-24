@@ -517,6 +517,9 @@
     <string name="pref_enable_utp_summary">Intended to mitigate poor latency and other congestion control issues found in conventional BitTorrent over TCP, while providing reliable, ordered delivery.</string>
     <string name="pref_enable_upnp_title">UPnP</string>
     <string name="pref_enable_natpmp_title">NAT-PMP</string>
+    <string name="pref_proton_port_forwarding_title">Proton VPN port forwarding</string>
+    <string name="pref_proton_port_forwarding_summary">Requires a Proton P2P WireGuard profile with NAT-PMP enabled. Uses gateway 10.2.0.1 and sets the listening port automatically.</string>
+    <string name="pref_proton_port_forwarding_status">Port forwarding status</string>
     <string name="pref_port_settings_category">Port settings</string>
     <string name="pref_use_random_port_title">Use random port</string>
     <string name="pref_use_random_port_summarty">Sets the start port randomly in range [%1$d, %2$d] and the ending port as the first + 10.</string>

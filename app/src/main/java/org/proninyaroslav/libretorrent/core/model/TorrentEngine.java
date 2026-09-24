@@ -111,6 +111,7 @@ public class TorrentEngine {
     private final DownloadsCompletedListener downloadsCompleted;
     private final ExecutorService exec = Executors.newSingleThreadExecutor();
     private final SessionErrorFilter errorFilter = new SessionErrorFilter();
+    private ProtonPortForwarder protonForwarder;
 
     private static volatile TorrentEngine INSTANCE;
 
@@ -293,6 +294,7 @@ public class TorrentEngine {
         if (!isRunning())
             return;
 
+        stopProtonForwarding();
         disposables.clear();
         stopWatchDir();
         stopStreamingServer();
@@ -1092,6 +1094,7 @@ public class TorrentEngine {
         s.proxyPassword = pref.proxyPassword();
 
         session.setSettings(s);
+        updateProtonForwarding();
     }
 
     private SessionSettings.EncryptMode getEncryptInConnectionsMode() {
@@ -1251,10 +1254,49 @@ public class TorrentEngine {
         repo.updateTorrent(torrent);
     }
 
+    public synchronized String protonPortForwardingStatus() {
+        return protonForwarder == null ? "Stopped" : protonForwarder.status();
+    }
+
+    private synchronized void updateProtonForwarding() {
+        SessionSettings settings = session.getSettings();
+        boolean allowed = isRunning() && pref.protonPortForwarding()
+                && !(settings.proxyType != SessionSettings.ProxyType.NONE
+                && settings.proxyRequireAllConnections);
+        if (!allowed) {
+            stopProtonForwarding();
+        } else if (protonForwarder == null) {
+            protonForwarder = new ProtonPortForwarder(appContext, this::onProtonPortChanged);
+            protonForwarder.start();
+        }
+    }
+
+    private synchronized void stopProtonForwarding() {
+        if (protonForwarder != null) {
+            protonForwarder.stop();
+            protonForwarder = null;
+        }
+    }
+
+    private synchronized void onProtonPortChanged(int port) {
+        if (protonForwarder == null || !pref.protonPortForwarding() || !isRunning()) return;
+        SessionSettings settings = session.getSettings();
+        settings.portRangeFirst = port;
+        settings.portRangeSecond = port;
+        session.setSettings(settings, true);
+        Log.i(TAG, "Proton port forwarding: listening on " + port);
+    }
+
     private final TorrentEngineListener engineListener = new TorrentEngineListener() {
         @Override
         public void onSessionStarted() {
+            updateProtonForwarding();
             handleOnSessionStarted();
+        }
+
+        @Override
+        public void onSessionStopped() {
+            stopProtonForwarding();
         }
 
         @Override
@@ -1520,6 +1562,12 @@ public class TorrentEngine {
             SessionSettings s = session.getSettings();
             s.natPmpEnabled = pref.enableNatPmp();
             session.setSettings(s);
+
+        } else if (key.equals(appContext.getString(R.string.pref_key_proton_port_forwarding))) {
+            SessionSettings s = session.getSettings();
+            s.protonPortForwarding = pref.protonPortForwarding();
+            session.setSettings(s, false);
+            updateProtonForwarding();
 
         } else if (key.equals(appContext.getString(R.string.pref_key_enc_in_connections_mode))) {
             SessionSettings s = session.getSettings();

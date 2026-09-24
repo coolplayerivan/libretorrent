@@ -80,6 +80,7 @@
     <string name="pref_key_enable_utp" translatable="false">pref_key_enable_utp</string>
     <string name="pref_key_enable_upnp" translatable="false">pref_key_enable_upnp</string>
     <string name="pref_key_enable_natpmp" translatable="false">pref_key_enable_natpmp</string>
+    <string name="pref_key_proton_port_forwarding" translatable="false">pref_key_proton_port_forwarding</string>
     <string name="pref_key_use_random_port" translatable="false">pref_use_key_random_port</string>
     <string name="pref_key_port_range_first" translatable="false">pref_key_port_range_first</string>
     <string name="pref_key_port_range_second" translatable="false">pref_key_port_range_second</string>

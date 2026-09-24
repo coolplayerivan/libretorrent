@@ -241,6 +241,7 @@ public class SettingsRepositoryImpl implements SettingsRepository {
         settings.utpEnabled = enableUtp();
         settings.upnpEnabled = enableUpnp();
         settings.natPmpEnabled = enableNatPmp();
+        settings.protonPortForwarding = protonPortForwarding();
         settings.encryptModeIncoming = SessionSettings.EncryptMode.fromValue(encryptInConnectionsMode());
         settings.encryptModeOutcoming = SessionSettings.EncryptMode.fromValue(encryptOutConnectionsMode());
         settings.autoManaged = autoManage();
@@ -690,6 +691,17 @@ public class SettingsRepositoryImpl implements SettingsRepository {
         pref.edit()
                 .putBoolean(appContext.getString(R.string.pref_key_enable_natpmp), val)
                 .apply();
+    }
+
+    @Override
+    public boolean protonPortForwarding() {
+        return pref.getBoolean(appContext.getString(R.string.pref_key_proton_port_forwarding),
+                SessionSettings.DEFAULT_PROTON_PORT_FORWARDING);
+    }
+
+    @Override
+    public void protonPortForwarding(boolean val) {
+        pref.edit().putBoolean(appContext.getString(R.string.pref_key_proton_port_forwarding), val).apply();
     }
 
     @Override

@@ -852,7 +852,7 @@ public class TorrentSessionImpl extends SessionManager
             Log.i(TAG, "User agent: " + sp.get_str(settings_pack.string_types.user_agent.swigValue()));
         }
 
-        if (settings.useRandomPort) {
+        if (settings.useRandomPort && !settings.protonPortForwarding) {
             setRandomPort(settings);
         }
         settingsToSettingsPack(settings, params.getSettings());
@@ -1197,8 +1197,8 @@ public class TorrentSessionImpl extends SessionManager
         sp.setBoolean(settings_pack.bool_types.enable_lsd.swigValue(), settings.lsdEnabled && !proxyKillSwitch);
         sp.setBoolean(settings_pack.bool_types.enable_incoming_utp.swigValue(), settings.utpEnabled);
         sp.setBoolean(settings_pack.bool_types.enable_outgoing_utp.swigValue(), settings.utpEnabled);
-        sp.setBoolean(settings_pack.bool_types.enable_upnp.swigValue(), settings.upnpEnabled && !proxyKillSwitch);
-        sp.setBoolean(settings_pack.bool_types.enable_natpmp.swigValue(), settings.natPmpEnabled && !proxyKillSwitch);
+        sp.setBoolean(settings_pack.bool_types.enable_upnp.swigValue(), settings.upnpEnabled && !proxyKillSwitch && !settings.protonPortForwarding);
+        sp.setBoolean(settings_pack.bool_types.enable_natpmp.swigValue(), settings.natPmpEnabled && !proxyKillSwitch && !settings.protonPortForwarding);
         var encryptModeOutcoming = convertEncryptMode(settings.encryptModeOutcoming);
         var encryptModeIncoming = convertEncryptMode(settings.encryptModeIncoming);
         var encLevel = getAllowedEncryptLevel(settings.encryptModeOutcoming, settings.encryptModeIncoming);
@@ -1309,7 +1309,7 @@ public class TorrentSessionImpl extends SessionManager
         applySessionLoggerFilters(settings);
         enableSessionLogger(settings.logging);
 
-        if (!keepPort && settings.useRandomPort) {
+        if (!keepPort && settings.useRandomPort && !settings.protonPortForwarding) {
             setRandomPort(settings);
         }
 
